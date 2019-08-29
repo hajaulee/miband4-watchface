@@ -5,12 +5,58 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 </head>
 <body>
-	<div id="content" style="margin: auto;margin-top: 100px;"></div>
+	<div id="content" style="position:fixed; top: 30%; left: 40%;"></div>
 
 	<script type="text/javascript">
-		
-		$.get('./manifest.json', function(data) {
-			console.log(data);
+
+		function showOne(x, index){
+			$('#content').append('<img src="./' + pad(index?index+x.ImageIndex:x.ImageIndex,4) +'.png" style="position: absolute;top:'+x.Y+'px;left: '+x.X+'px;">')
+		}
+		function showHours(x){
+			showOne(x.Tens, 2)
+			showOne(x.Ones, 1)
+		}
+		function showMinutes(x){
+			showOne(x.Tens, 4)
+			showOne(x.Ones, 5)
+		}
+		function pad(num, size) {
+		    var s = "000000000" + num;
+		    return s.substr(s.length-size);
+		}
+
+		function getRandomInt(min, max) {
+		    min = Math.ceil(min);
+		    max = Math.floor(max);
+		    return Math.floor(Math.random() * (max - min + 1)) + min;
+		}
+		function showDate(x){
+			$('#content').append('<div id="month" style="position: absolute;top:'+x.TopLeftY+'px;left: '+x.TopLeftX+'px;width: '+(x.BottomRightX - x.TopLeftX)+'px">')
+			$('#month').append('<img src="./' + pad(1+ x.ImageIndex,4) +'.png" >')
+			$('#month').append('<img src="./' + pad(2+ x.ImageIndex,4) +'.png" style="margin-left:1px">')
+		}
+
+		function showDate_(x){
+			$('#content').append('<div id="day" style="position: absolute;top:'+x.TopLeftY+'px;left: '+x.TopLeftX+'px;width: '+(x.BottomRightX - x.TopLeftX)+'px">')
+			$('#day').append('<img src="./' + pad(getRandomInt(0, 2)+ x.ImageIndex,4) +'.png" >')
+			$('#day').append('<img src="./' + pad(getRandomInt(0, 9)+ x.ImageIndex,4) +'.png" style="margin-left:1px">')
+		}
+		function showWeekDay(x){
+			$('#content').append('<img src="./' + pad(13 + 7+x.ImageIndex,4) +'.png" style="position: absolute;top:'+x.Y+'px;left: '+x.X+'px;">')
+		}
+		$.get('https://raw.githubusercontent.com/hajaulee/miband4-watchface/master/1566911367367.json', 
+			function(data) {
+			let mf = JSON.parse(data)
+			setInterval(() =>{
+				$('#content').html('')
+				showOne(mf.Background.Image)
+				showHours(mf.Time.Hours)
+				showMinutes(mf.Time.Minutes)
+				showDate(mf.Date.MonthAndDay.Separate.Month)
+				showDate_(mf.Date.MonthAndDay.Separate.Day)
+				showWeekDay(mf.Date.WeekDay)
+			}, 3000)
+			
 		})
 	</script>
 </body>
