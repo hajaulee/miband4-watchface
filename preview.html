@@ -42,11 +42,12 @@
 			$('#day').append('<img src="./' + pad(getRandomInt(0, 9)+ x.ImageIndex,4) +'.png" style="margin-left:1px">')
 		}
 		function showWeekDay(x){
-			$('#content').append('<img src="./' + pad(13 + 7+x.ImageIndex,4) +'.png" style="position: absolute;top:'+x.Y+'px;left: '+x.X+'px;">')
+			$('#content').append('<img src="./' + pad(13 + getRandomInt(0,7) +x.ImageIndex,4) +'.png" style="position: absolute;top:'+x.Y+'px;left: '+x.X+'px;">')
 		}
-		$.get('https://raw.githubusercontent.com/hajaulee/miband4-watchface/master/1566911367367.json', 
+		$.get('http://127.0.0.1:8887/1566911367367.json', 
 			function(data) {
-			let mf = JSON.parse(data)
+			// let mf = JSON.parse(data)
+			let mf = data
 			setInterval(() =>{
 				$('#content').html('')
 				showOne(mf.Background.Image)
